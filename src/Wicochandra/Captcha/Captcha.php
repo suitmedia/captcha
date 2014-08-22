@@ -21,10 +21,29 @@ class Captcha extends SimpleCaptcha {
     }
 
 
+    /**
+     * File generation
+     */
+    protected function WriteImage() {
+        ob_start();
+        if ($this->imageFormat == 'png' && function_exists('imagepng')) {
+            imagepng($this->im);
+        } else {
+            imagejpeg($this->im, null, 80);
+        }
+        $this->data = ob_get_clean();
+    }
+
     public function CreateImage() {
         parent::CreateImage();
 
-        return \Response::make('', 200, ['content-type' => '']);
+        $headers = [];
+        if ($this->imageFormat == 'png') {
+            $headers['content-type'] = 'image/png';
+        } else {
+            $headers['content-type'] = 'image/jpeg';
+        }
+        return \Response::make($this->data, 200, $headers);
     }
 
     /**

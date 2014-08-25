@@ -20,6 +20,50 @@ class Captcha extends SimpleCaptcha {
         return route('captcha');
     }
 
+    public function CreateImage() {
+        $ini = microtime(true);
+
+        /** Initialization */
+        $this->ImageAllocate();
+
+        /** Text insertion */
+        $text = $this->GetCaptchaText();
+        $fontcfg  = $this->fonts[array_rand($this->fonts)];
+        $this->WriteText($text, $fontcfg);
+
+        \Session::put($this->session_var, $text);
+
+        /** Transformations */
+        if (!empty($this->lineWidth)) {
+            $this->WriteLine();
+        }
+        $this->WaveImage();
+        if ($this->blur && function_exists('imagefilter')) {
+            imagefilter($this->im, IMG_FILTER_GAUSSIAN_BLUR);
+        }
+        $this->ReduceImage();
+
+
+        if ($this->debug) {
+            imagestring($this->im, 1, 1, $this->height-8,
+                "$text {$fontcfg['font']} ".round((microtime(true)-$ini)*1000)."ms",
+                $this->GdFgColor
+            );
+        }
+
+
+        /** Output */
+        $data = $this->WriteImage();
+        $this->Cleanup();
+
+        $headers = [];
+        if ($this->imageFormat == 'png') {
+            $headers['content-type'] = 'image/png';
+        } else {
+            $headers['content-type'] = 'image/jpeg';
+        }
+        return \Response::make($data, 200, $headers);
+    }
 
     /**
      * File generation
@@ -31,19 +75,7 @@ class Captcha extends SimpleCaptcha {
         } else {
             imagejpeg($this->im, null, 80);
         }
-        $this->data = ob_get_clean();
-    }
-
-    public function CreateImage() {
-        parent::CreateImage();
-
-        $headers = [];
-        if ($this->imageFormat == 'png') {
-            $headers['content-type'] = 'image/png';
-        } else {
-            $headers['content-type'] = 'image/jpeg';
-        }
-        return \Response::make($this->data, 200, $headers);
+        return ob_get_clean();
     }
 
     /**

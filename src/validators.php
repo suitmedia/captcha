@@ -2,7 +2,7 @@
 
 use Wicochandra\Captcha\CaptchaValidator;
 
-$this->app->validator->resolver(function($translator, $data, $rules, $messages)
+$this->app->validator->extend('captcha', function($attribute, $value, $parameters)
 {
-    return new CaptchaValidator($translator, $data, $rules, $messages);
+    return $value == \Captcha::getCurrentSession();
 });

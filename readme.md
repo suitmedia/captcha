@@ -5,6 +5,10 @@ Simple image captcha based on [cool-php-captcha v0.3.1][1].
 [![Latest Stable Version](https://poser.pugx.org/wicochandra/captcha/v/stable.png)](https://packagist.org/packages/wicochandra/captcha)
 [![Total Downloads](https://poser.pugx.org/wicochandra/captcha/downloads.png)](https://packagist.org/packages/wicochandra/captcha)
 
+## Update 1.1.0
+
+Added `Captcha::isValid($value)` for checking captcha session.
+
 ## Installation
 
 Firstly, you need to add the package to the `require` attribute of your `composer.json` file:
@@ -59,13 +63,15 @@ There are two main usage of the package.
 1. **Image link**, you can use the following directive to generate the captcha link.
 ```php
     //Will return http://[web url]/captcha/image
-    Captcha->url();
+    Captcha::url();
 ```
-1. **Validator**, you can use `captcha` validator to validate whether the input is match with the captcha image or not.
+1. **Validator**, you can use `captcha` validator or `Captcha::isValid($value)` to validate whether the input is match with the captcha image or not.
 ```php
    $rules = array(
         '[input name]' => 'captcha'
     );
+
+    Captcha::isValid('captcah-input');  //return true if valid. Otherwise return false
 ```
 **Note: You have to define validation error message for `captcha` by yourself on `app/lang/{locale}/validation.php`**
 

@@ -16,6 +16,10 @@ class Captcha extends SimpleCaptcha {
         return \Session::get($this->session_var);
     }
 
+    public function isValid($value) {
+        return $this->getCurrentSession() === $value;
+    }
+
     public function url() {
         return route('captcha');
     }

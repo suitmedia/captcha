@@ -21,7 +21,7 @@ class Captcha extends SimpleCaptcha {
     }
 
     public function url() {
-        return route('captcha');
+        return route('captcha', array(mt_rand()));
     }
 
     public function CreateImage() {

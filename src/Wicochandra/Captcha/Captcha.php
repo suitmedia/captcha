@@ -92,7 +92,7 @@ class Captcha extends SimpleCaptcha {
         }
 
         // Full path of font file
-        $fontfile = public_path('packages/wicochandra/captcha/fonts/'.$fontcfg['font']);
+        $fontfile = public_path('vendor/captcha/fonts/'.$fontcfg['font']);
 
 
         /** Increase font-size for shortest words: 9% for each glyp missing */

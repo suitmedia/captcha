@@ -1,19 +1,28 @@
 <?php
 namespace Wicochandra\Captcha;
 
+use Illuminate\Session\SessionManager;
+use Illuminate\Contracts\Routing\ResponseFactory;
+
 use SimpleCaptcha;
 
 class Captcha extends SimpleCaptcha {
 
-    public function __construct($config = array()) {
+    protected $session;
+
+    protected $response;
+
+    public function __construct($config = array(), SessionManager $session, ResponseFactory $response) {
         parent::__construct($config);
+        $this->session = $session;
+        $this->response = $response;
         foreach ($config as $key => $value) {
             $this->$key = $value;
         }
     }
 
     public function getCurrentSession() {
-        return \Session::get($this->session_var);
+        return $this->session->get($this->session_var);
     }
 
     public function isValid($value) {
@@ -35,7 +44,7 @@ class Captcha extends SimpleCaptcha {
         $fontcfg  = $this->fonts[array_rand($this->fonts)];
         $this->WriteText($text, $fontcfg);
 
-        \Session::put($this->session_var, $text);
+        $this->session->put($this->session_var, $text);
 
         /** Transformations */
         if (!empty($this->lineWidth)) {
@@ -66,7 +75,7 @@ class Captcha extends SimpleCaptcha {
         } else {
             $headers['content-type'] = 'image/jpeg';
         }
-        return \Response::make($data, 200, $headers);
+        return $this->response->make($data, 200, $headers);
     }
 
     /**

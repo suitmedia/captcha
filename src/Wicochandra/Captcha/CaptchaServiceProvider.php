@@ -39,7 +39,7 @@ class CaptchaServiceProvider extends ServiceProvider {
     public function register()
     {
         $this->app->bindShared('captcha', function($app) {
-            return new Captcha($app->config->get('captcha'));
+            return new Captcha($app->config->get('captcha'), $app['session'], $app->make('Illuminate\Contracts\Routing\ResponseFactory'));
         });
     }
 

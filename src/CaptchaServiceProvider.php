@@ -21,15 +21,15 @@ class CaptchaServiceProvider extends ServiceProvider {
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../../config/config.php' => config_path('captcha.php')
+            __DIR__.'/config/config.php' => config_path('captcha.php')
         ], 'config');
 
         $this->publishes([
-            __DIR__.'/../../../public' => public_path('vendor/captcha'),
+            __DIR__.'/../public' => public_path('vendor/captcha'),
         ], 'public');
 
-        include __DIR__.'/../../routes.php';
-        include __DIR__.'/../../validators.php';
+        include __DIR__.'/routes.php';
+        include __DIR__.'/validators.php';
     }
     /**
      * Register the service provider.

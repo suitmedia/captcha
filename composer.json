@@ -1,5 +1,5 @@
 {
-    "name": "wicochandra/captcha",
+    "name": "suitmedia/captcha",
     "description": "This package is captcha based on cool-php-captcha 0.3.1. It provides simple call usage and validation.",
     "keywords": ["framework", "laravel", "captcha", "cool-php-captcha", "security"],
     "license": [
